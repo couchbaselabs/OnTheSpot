@@ -15,6 +15,7 @@
 > {
 
     @private
+    NSMutableArray* _images;
     NSMutableArray* _motionSamples;
     CMMotionManager* _motionManager;
     NSTimer* _sampleTimer;

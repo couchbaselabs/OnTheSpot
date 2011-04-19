@@ -7,8 +7,10 @@
 //
 
 #import "RootViewController.h"
+#import "DetailViewController.h"
 
 @interface RootViewController()
+@property (nonatomic, retain) NSMutableArray* images;
 @property (nonatomic, retain) NSTimer* sampleTimer;
 - (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData;
 - (void)takeMotionSample:(NSTimer*)aTimer;
@@ -20,6 +22,7 @@
 @implementation RootViewController
 
 @synthesize sampleTimer = _sampleTimer;
+@synthesize images = _images;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -48,6 +51,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"On The Spot";
+    if (_images == nil) {
+        self.images = [NSMutableArray array];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,7 +93,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return [_images count];
 }
 
 // Customize the appearance of table view cells.
@@ -98,6 +105,9 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
+    NSDictionary* jsonData = [_images objectAtIndex:indexPath.row];
+    cell.textLabel.text = [[[jsonData valueForKey:@"mediaMetaData"] valueForKey:@"{Exif}"] valueForKey:@"DateTimeOriginal"];
+    cell.imageView.image = [jsonData valueForKey:@"imageData"];
 
     // Configure the cell.
     return cell;
@@ -144,15 +154,15 @@
 }
 */
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-    // ...
-    // Pass the selected object to the new view controller.
+    DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+    NSDictionary* jsonData = [_images objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:detailViewController animated:YES];
+    detailViewController.imageView.image = [jsonData valueForKey:@"imageData"];
+    detailViewController.textView.text = [jsonData description];
     [detailViewController release];
-	*/
 }
 
 - (void)didReceiveMemoryWarning
@@ -235,8 +245,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                      metaData, @"mediaMetaData"
                                      , motionData, @"motionData"
+                                     , anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
                                      , nil];
-    NSLog(@"JSON\n%@", jsonData);
+    [_images addObject:jsonData];
+    [self.tableView reloadData];
 
     [dateFormatter release];
     // store image in CouchDB

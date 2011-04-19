@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC2F6357135DDF0600C63709 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC2F6355135DDF0600C63709 /* DetailViewController.m */; };
+		BC2F6358135DDF0600C63709 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC2F6356135DDF0600C63709 /* DetailViewController.xib */; };
 		BCB6428F135D7F5000DA6256 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB6428E135D7F5000DA6256 /* UIKit.framework */; };
 		BCB64291135D7F5000DA6256 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB64290135D7F5000DA6256 /* Foundation.framework */; };
 		BCB64293135D7F5000DA6256 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB64292135D7F5000DA6256 /* CoreGraphics.framework */; };
@@ -22,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC2F6354135DDF0600C63709 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		BC2F6355135DDF0600C63709 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		BC2F6356135DDF0600C63709 /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
 		BCB6428A135D7F5000DA6256 /* OnTheSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCB6428E135D7F5000DA6256 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BCB64290135D7F5000DA6256 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -95,6 +100,9 @@
 				BCB642A3135D7F5000DA6256 /* RootViewController.h */,
 				BCB642A4135D7F5000DA6256 /* RootViewController.m */,
 				BCB642A6135D7F5000DA6256 /* RootViewController.xib */,
+				BC2F6354135DDF0600C63709 /* DetailViewController.h */,
+				BC2F6355135DDF0600C63709 /* DetailViewController.m */,
+				BC2F6356135DDF0600C63709 /* DetailViewController.xib */,
 				BCB64295135D7F5000DA6256 /* Supporting Files */,
 			);
 			path = OnTheSpot;
@@ -166,6 +174,7 @@
 				BCB642A8135D7F5000DA6256 /* RootViewController.xib in Resources */,
 				BCBD6725135D8E4D00B25825 /* Default.png in Resources */,
 				BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */,
+				BC2F6358135DDF0600C63709 /* DetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +188,7 @@
 				BCB6429C135D7F5000DA6256 /* main.m in Sources */,
 				BCB6429F135D7F5000DA6256 /* OnTheSpotAppDelegate.m in Sources */,
 				BCB642A5135D7F5000DA6256 /* RootViewController.m in Sources */,
+				BC2F6357135DDF0600C63709 /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
