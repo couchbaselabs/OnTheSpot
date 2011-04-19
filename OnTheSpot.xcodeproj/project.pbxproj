@@ -18,6 +18,7 @@
 		BCB642A8135D7F5000DA6256 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCB642A6135D7F5000DA6256 /* RootViewController.xib */; };
 		BCBD6725135D8E4D00B25825 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6723135D8E4D00B25825 /* Default.png */; };
 		BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6724135D8E4D00B25825 /* Default@2x.png */; };
+		BCBD6728135D94C200B25825 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCBD6727135D94C200B25825 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		BCB642A7135D7F5000DA6256 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
 		BCBD6723135D8E4D00B25825 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BCBD6724135D8E4D00B25825 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		BCBD6727135D94C200B25825 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCBD6728135D94C200B25825 /* CoreMotion.framework in Frameworks */,
 				BCB6428F135D7F5000DA6256 /* UIKit.framework in Frameworks */,
 				BCB64291135D7F5000DA6256 /* Foundation.framework in Frameworks */,
 				BCB64293135D7F5000DA6256 /* CoreGraphics.framework in Frameworks */,
@@ -75,6 +78,7 @@
 		BCB6428D135D7F5000DA6256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BCBD6727135D94C200B25825 /* CoreMotion.framework */,
 				BCB6428E135D7F5000DA6256 /* UIKit.framework */,
 				BCB64290135D7F5000DA6256 /* Foundation.framework */,
 				BCB64292135D7F5000DA6256 /* CoreGraphics.framework */,

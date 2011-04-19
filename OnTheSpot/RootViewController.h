@@ -7,12 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreMotion/CMMotionManager.h>
 
 @interface RootViewController : UITableViewController
 < UINavigationControllerDelegate
 , UIImagePickerControllerDelegate
 > {
 
+    @private
+    NSMutableArray* _motionSamples;
+    CMMotionManager* _motionManager;
+    NSTimer* _sampleTimer;
 }
 
 - (IBAction)takePicture;

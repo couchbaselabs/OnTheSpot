@@ -9,11 +9,41 @@
 #import "RootViewController.h"
 
 @interface RootViewController()
+@property (nonatomic, retain) NSTimer* sampleTimer;
 - (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData;
+- (void)takeMotionSample:(NSTimer*)aTimer;
+- (void)startMotionSampling;
+- (void)stopMotionSampling;
 @end
 
 
 @implementation RootViewController
+
+@synthesize sampleTimer = _sampleTimer;
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder])) {
+        _motionManager = [CMMotionManager new];
+    }
+    return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+        _motionManager = [CMMotionManager new];
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    if ((self = [super initWithStyle:style])) {
+        _motionManager = [CMMotionManager new];
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -143,11 +173,17 @@
 
 - (void)dealloc
 {
+    [_motionManager release];
     [super dealloc];
 }
 
 - (IBAction)takePicture
 {
+    // start background motion sampling
+    [self performSelector
+     :@selector(startMotionSampling) withObject:nil];
+
+    // present camera ui
     UIImagePickerController *vc = [[UIImagePickerController alloc] init];
     vc.delegate = self;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -162,6 +198,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    [self stopMotionSampling];
     [self.navigationController dismissModalViewControllerAnimated:YES];
 
     NSDictionary* metaData = (NSDictionary*)[info valueForKey:UIImagePickerControllerMediaMetadata];
@@ -171,6 +208,95 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 - (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData
 {
+    NSDictionary* exifData = [metaData valueForKey:@"{Exif}"];
+    NSAssert(exifData != nil, @"Missing exif data");
+
+    NSDateFormatter* dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat = @"yyyy:MM:dd HH:mm:ss";
+    NSString *dateTimeString = [exifData valueForKey:@"DateTimeOriginal"];
+    NSDate* dateTimeDigitized = [dateFormatter dateFromString:dateTimeString];
+    NSAssert(dateTimeDigitized != nil, @"Missing dateTimeDigitized");
+
+    NSDictionary* motionData = nil;
+    for (NSDictionary* sample in _motionSamples) {
+        // NOTE: for some odd reason using isEqualToDate: never equals true,
+        //       even though the dates are the same
+        //       also using compare: with NSOrderedSame does not work properly.
+        //       The current code is more fault tolerant, since the motion samples
+        //       may not have been taken at the exact same time as the picture.
+        NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
+        if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            motionData = sample;
+            break;
+        }
+    }
+    NSAssert(motionData != nil, @"Missing motion sample for image take at %@", metaData);
+
+    NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     metaData, @"mediaMetaData"
+                                     , motionData, @"motionData"
+                                     , nil];
+    NSLog(@"JSON\n%@", jsonData);
+
+    [dateFormatter release];
     // store image in CouchDB
 }
+
+- (void)startMotionSampling
+{
+    if (nil == _motionSamples) {
+        _motionSamples = [[NSMutableArray alloc] init];
+    }
+    else {
+        [_motionSamples removeAllObjects];
+    }
+
+    // start motion sensor updates
+    if (!_motionManager.gyroActive && _motionManager.gyroAvailable) {
+        _motionManager.gyroUpdateInterval = 1.0;
+        [_motionManager startGyroUpdates];
+    }
+    if (!_motionManager.deviceMotionActive && _motionManager.deviceMotionAvailable) {
+        _motionManager.deviceMotionUpdateInterval = 1.0;
+        [_motionManager startDeviceMotionUpdates];
+    }
+    if (!_motionManager.accelerometerActive && _motionManager.accelerometerAvailable) {
+        _motionManager.accelerometerUpdateInterval = 1.0;
+        [_motionManager startAccelerometerUpdates];
+    }
+
+    self.sampleTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                        target:self
+                                                      selector:@selector(takeMotionSample:)
+                                                      userInfo:nil
+                                                       repeats:YES];
+}
+
+- (void)stopMotionSampling
+{
+    [_sampleTimer invalidate];
+    self.sampleTimer = nil;
+
+    if (_motionManager.gyroActive && _motionManager.gyroAvailable) {
+        [_motionManager stopGyroUpdates];
+    }
+    if (_motionManager.deviceMotionActive && _motionManager.deviceMotionAvailable) {
+        [_motionManager stopDeviceMotionUpdates];
+    }
+    if (_motionManager.accelerometerActive && _motionManager.accelerometerAvailable) {
+        [_motionManager stopAccelerometerUpdates];
+    }
+}
+
+- (void)takeMotionSample:(NSTimer*)aTimer
+{
+    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   [NSDate date], @"timestamp"
+                                   , _motionManager.gyroData, @"gyroData"
+                                   , _motionManager.deviceMotion, @"deviceMotion"
+                                   , _motionManager.accelerometerData, @"accelerometerData"
+                                   , nil];
+    [_motionSamples addObject:sample];
+}
+
 @end
