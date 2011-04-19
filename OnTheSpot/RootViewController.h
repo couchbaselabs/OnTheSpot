@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RootViewController : UITableViewController {
+@interface RootViewController : UITableViewController
+< UINavigationControllerDelegate
+, UIImagePickerControllerDelegate
+> {
 
 }
 
+- (IBAction)takePicture;
 
 @end

@@ -8,6 +8,11 @@
 
 #import "RootViewController.h"
 
+@interface RootViewController()
+- (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData;
+@end
+
+
 @implementation RootViewController
 
 - (void)viewDidLoad
@@ -141,4 +146,31 @@
     [super dealloc];
 }
 
+- (IBAction)takePicture
+{
+    UIImagePickerController *vc = [[UIImagePickerController alloc] init];
+    vc.delegate = self;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        vc.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    [self.navigationController presentModalViewController:vc animated:YES];
+    [vc release];
+}
+
+#pragma mark -
+#pragma mark UIImagePickerControllerDelegate Methods
+- (void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self.navigationController dismissModalViewControllerAnimated:YES];
+
+    NSDictionary* metaData = (NSDictionary*)[info valueForKey:UIImagePickerControllerMediaMetadata];
+    UIImage* image = (UIImage*)[info valueForKey:UIImagePickerControllerOriginalImage];
+    [self storeImage:image withMetaData:metaData];
+}
+
+- (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData
+{
+    // store image in CouchDB
+}
 @end
