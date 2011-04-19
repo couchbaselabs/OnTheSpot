@@ -16,6 +16,8 @@
 		BCB642A2135D7F5000DA6256 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCB642A0135D7F5000DA6256 /* MainWindow.xib */; };
 		BCB642A5135D7F5000DA6256 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BCB642A4135D7F5000DA6256 /* RootViewController.m */; };
 		BCB642A8135D7F5000DA6256 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCB642A6135D7F5000DA6256 /* RootViewController.xib */; };
+		BCBD6725135D8E4D00B25825 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6723135D8E4D00B25825 /* Default.png */; };
+		BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6724135D8E4D00B25825 /* Default@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		BCB642A3135D7F5000DA6256 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		BCB642A4135D7F5000DA6256 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		BCB642A7135D7F5000DA6256 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		BCBD6723135D8E4D00B25825 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		BCBD6724135D8E4D00B25825 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +56,8 @@
 		BCB6427F135D7F5000DA6256 = {
 			isa = PBXGroup;
 			children = (
+				BCBD6723135D8E4D00B25825 /* Default.png */,
+				BCBD6724135D8E4D00B25825 /* Default@2x.png */,
 				BCB64294135D7F5000DA6256 /* OnTheSpot */,
 				BCB6428D135D7F5000DA6256 /* Frameworks */,
 				BCB6428B135D7F5000DA6256 /* Products */,
@@ -154,6 +160,8 @@
 				BCB64299135D7F5000DA6256 /* InfoPlist.strings in Resources */,
 				BCB642A2135D7F5000DA6256 /* MainWindow.xib in Resources */,
 				BCB642A8135D7F5000DA6256 /* RootViewController.xib in Resources */,
+				BCBD6725135D8E4D00B25825 /* Default.png in Resources */,
+				BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +250,7 @@
 				GCC_PREFIX_HEADER = "OnTheSpot/OnTheSpot-Prefix.pch";
 				INFOPLIST_FILE = "OnTheSpot/OnTheSpot-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -255,6 +264,7 @@
 				GCC_PREFIX_HEADER = "OnTheSpot/OnTheSpot-Prefix.pch";
 				INFOPLIST_FILE = "OnTheSpot/OnTheSpot-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -279,6 +289,7 @@
 				BCB642AD135D7F5000DA6256 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
