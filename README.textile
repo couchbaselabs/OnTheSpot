@@ -1,0 +1,12 @@
+h1. On The Spot
+
+A simple iOS application that takes a pictures and stores additional information, like media meta data, location data, motion sensor data along with the image in a CouchDB.
+
+h2. Requirements
+
+"TouchJSON":http://github.com/touchCode/TouchJSON
+
+Run the following commands to initialize the workspace
+
+    % git submodule init
+    % git submodule update

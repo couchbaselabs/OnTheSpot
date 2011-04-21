@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CMMotionManager.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface RootViewController : UITableViewController
 < UINavigationControllerDelegate
 , UIImagePickerControllerDelegate
+, CLLocationManagerDelegate
 > {
 
     @private
     NSMutableArray* _images;
     NSMutableArray* _motionSamples;
     CMMotionManager* _motionManager;
+    CLLocationManager* _locationManager;
+    NSMutableArray* _locationSamples;
+    NSMutableArray* _headingSamples;
     NSTimer* _sampleTimer;
 }
 

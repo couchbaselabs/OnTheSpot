@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "DetailViewController.h"
+#import "CJSONSerializer.h"
 
 @interface RootViewController()
 @property (nonatomic, retain) NSMutableArray* images;
@@ -28,22 +29,11 @@
 {
     if ((self = [super initWithCoder:aDecoder])) {
         _motionManager = [CMMotionManager new];
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        _motionManager = [CMMotionManager new];
-    }
-    return self;
-}
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    if ((self = [super initWithStyle:style])) {
-        _motionManager = [CMMotionManager new];
+        _locationManager = [CLLocationManager new];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        _locationManager.distanceFilter = kCLDistanceFilterNone;
+        _locationManager.purpose = NSLocalizedString(@"Location services are used to attach the location of where a photo was taken.", nil);
     }
     return self;
 }
@@ -161,7 +151,15 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSDictionary* jsonData = [_images objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:detailViewController animated:YES];
     detailViewController.imageView.image = [jsonData valueForKey:@"imageData"];
-    detailViewController.textView.text = [jsonData description];
+    NSError* error = NULL;
+    NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
+    if (error != NULL) {
+        NSLog(@"Error while serializing %@", jsonData);
+        detailViewController.textView.text = [jsonData description];
+    }
+    else {
+        detailViewController.textView.text = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
+    }
     [detailViewController release];
 }
 
@@ -184,14 +182,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)dealloc
 {
     [_motionManager release];
+    [_locationManager release];
     [super dealloc];
 }
 
 - (IBAction)takePicture
 {
     // start background motion sampling
-    [self performSelector
-     :@selector(startMotionSampling) withObject:nil];
+    [self startMotionSampling];
 
     // present camera ui
     UIImagePickerController *vc = [[UIImagePickerController alloc] init];
@@ -214,6 +212,36 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSDictionary* metaData = (NSDictionary*)[info valueForKey:UIImagePickerControllerMediaMetadata];
     UIImage* image = (UIImage*)[info valueForKey:UIImagePickerControllerOriginalImage];
     [self storeImage:image withMetaData:metaData];
+}
+
+#pragma mark -
+#pragma mark CLLocationManagerDelegate Methods
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    NSLog(@"CLLocationManager:didFailWithError: %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+    didUpdateToLocation:(CLLocation *)newLocation
+           fromLocation:(CLLocation *)oldLocation
+{
+    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   [NSDate date], @"timestamp"
+                                   , newLocation, @"location"
+                                   , nil];
+    [_locationSamples addObject:sample];
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didUpdateHeading:(CLHeading *)newHeading
+{
+    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   [NSDate date], @"timestamp"
+                                   , newHeading, @"heading"
+                                   , nil];
+    [_headingSamples addObject:sample];
 }
 
 - (void)storeImage:(UIImage*)anImage withMetaData:(NSDictionary*)metaData
@@ -242,10 +270,30 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }
     NSAssert(motionData != nil, @"Missing motion sample for image take at %@", metaData);
 
+    NSDictionary* locationData = nil;
+    for (NSDictionary* sample in _locationSamples) {
+        NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
+        if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            locationData = sample;
+            break;
+        }
+    }
+
+    NSDictionary* headingData = nil;
+    for (NSDictionary* sample in _headingSamples) {
+        NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
+        if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            headingData = sample;
+            break;
+        }
+    }
+
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                     metaData, @"mediaMetaData"
+                                     anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
+                                     , metaData, @"mediaMetaData"
                                      , motionData, @"motionData"
-                                     , anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
+                                     , locationData, @"locationData"
+                                     , headingData, @"headingData"
                                      , nil];
     [_images addObject:jsonData];
     [self.tableView reloadData];
@@ -262,6 +310,18 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     else {
         [_motionSamples removeAllObjects];
     }
+    if (nil == _locationSamples) {
+        _locationSamples = [[NSMutableArray alloc] init];
+    }
+    else {
+        [_locationSamples removeAllObjects];
+    }
+    if (nil == _headingSamples) {
+        _headingSamples = [[NSMutableArray alloc] init];
+    }
+    else {
+        [_headingSamples removeAllObjects];
+    }
 
     // start motion sensor updates
     if (!_motionManager.gyroActive && _motionManager.gyroAvailable) {
@@ -275,6 +335,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     if (!_motionManager.accelerometerActive && _motionManager.accelerometerAvailable) {
         _motionManager.accelerometerUpdateInterval = 1.0;
         [_motionManager startAccelerometerUpdates];
+    }
+
+    if ([CLLocationManager locationServicesEnabled]) {
+        [_locationManager startUpdatingLocation];
+    }
+    if ([CLLocationManager headingAvailable]) {
+        [_locationManager startUpdatingHeading];
     }
 
     self.sampleTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
@@ -298,6 +365,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     if (_motionManager.accelerometerActive && _motionManager.accelerometerAvailable) {
         [_motionManager stopAccelerometerUpdates];
     }
+    
+    [_locationManager startUpdatingLocation];
+    [_locationManager startUpdatingHeading];
 }
 
 - (void)takeMotionSample:(NSTimer*)aTimer

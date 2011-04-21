@@ -21,7 +21,26 @@
 		BCBD6725135D8E4D00B25825 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6723135D8E4D00B25825 /* Default.png */; };
 		BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BCBD6724135D8E4D00B25825 /* Default@2x.png */; };
 		BCBD6728135D94C200B25825 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCBD6727135D94C200B25825 /* CoreMotion.framework */; };
+		BCC6E840135DE2EC00BBA835 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC6E83F135DE2EC00BBA835 /* CoreLocation.framework */; };
+		BCC6E87C1360337C00BBA835 /* libTouchJSON.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC6E87B1360337C00BBA835 /* libTouchJSON.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BCC6E8771360336800BBA835 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 37A8C0F312B720A8009953BD;
+			remoteInfo = TouchJSON;
+		};
+		BCC6E8791360337500BBA835 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = TouchJSON;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BC2F6354135DDF0600C63709 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -44,6 +63,10 @@
 		BCBD6723135D8E4D00B25825 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BCBD6724135D8E4D00B25825 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BCBD6727135D94C200B25825 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		BCC6E83F135DE2EC00BBA835 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "TouchJSON-iOS.xcodeproj"; path = "Vendor/TouchJSON/Support/TouchJSON-iOS.xcodeproj"; sourceTree = "<group>"; };
+		BCC6E87B1360337C00BBA835 /* libTouchJSON.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libTouchJSON.a; sourceTree = SOURCE_ROOT; };
+		BCC6E87E136034BA00BBA835 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJSONSerializer.h; path = ../Vendor/TouchJSON/Source/JSON/CJSONSerializer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +74,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCC6E87C1360337C00BBA835 /* libTouchJSON.a in Frameworks */,
+				BCC6E840135DE2EC00BBA835 /* CoreLocation.framework in Frameworks */,
 				BCBD6728135D94C200B25825 /* CoreMotion.framework in Frameworks */,
 				BCB6428F135D7F5000DA6256 /* UIKit.framework in Frameworks */,
 				BCB64291135D7F5000DA6256 /* Foundation.framework in Frameworks */,
@@ -64,9 +89,11 @@
 		BCB6427F135D7F5000DA6256 = {
 			isa = PBXGroup;
 			children = (
+				BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */,
 				BCBD6723135D8E4D00B25825 /* Default.png */,
 				BCBD6724135D8E4D00B25825 /* Default@2x.png */,
 				BCB64294135D7F5000DA6256 /* OnTheSpot */,
+				BCC6E87D1360338E00BBA835 /* LIbraries */,
 				BCB6428D135D7F5000DA6256 /* Frameworks */,
 				BCB6428B135D7F5000DA6256 /* Products */,
 			);
@@ -83,6 +110,7 @@
 		BCB6428D135D7F5000DA6256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BCC6E83F135DE2EC00BBA835 /* CoreLocation.framework */,
 				BCBD6727135D94C200B25825 /* CoreMotion.framework */,
 				BCB6428E135D7F5000DA6256 /* UIKit.framework */,
 				BCB64290135D7F5000DA6256 /* Foundation.framework */,
@@ -94,6 +122,7 @@
 		BCB64294135D7F5000DA6256 /* OnTheSpot */ = {
 			isa = PBXGroup;
 			children = (
+				BCC6E87E136034BA00BBA835 /* CJSONSerializer.h */,
 				BCB6429D135D7F5000DA6256 /* OnTheSpotAppDelegate.h */,
 				BCB6429E135D7F5000DA6256 /* OnTheSpotAppDelegate.m */,
 				BCB642A0135D7F5000DA6256 /* MainWindow.xib */,
@@ -119,6 +148,22 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		BCC6E8711360336800BBA835 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BCC6E8781360336800BBA835 /* libTouchJSON.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCC6E87D1360338E00BBA835 /* LIbraries */ = {
+			isa = PBXGroup;
+			children = (
+				BCC6E87B1360337C00BBA835 /* libTouchJSON.a */,
+			);
+			name = LIbraries;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -133,6 +178,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BCC6E87A1360337500BBA835 /* PBXTargetDependency */,
 			);
 			name = OnTheSpot;
 			productName = OnTheSpot;
@@ -157,12 +203,28 @@
 			mainGroup = BCB6427F135D7F5000DA6256;
 			productRefGroup = BCB6428B135D7F5000DA6256 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BCC6E8711360336800BBA835 /* Products */;
+					ProjectRef = BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				BCB64289135D7F5000DA6256 /* OnTheSpot */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BCC6E8781360336800BBA835 /* libTouchJSON.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libTouchJSON.a;
+			remoteRef = BCC6E8771360336800BBA835 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BCB64288135D7F5000DA6256 /* Resources */ = {
@@ -193,6 +255,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BCC6E87A1360337500BBA835 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TouchJSON;
+			targetProxy = BCC6E8791360337500BBA835 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BCB64297135D7F5000DA6256 /* InfoPlist.strings */ = {
@@ -263,6 +333,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OnTheSpot/OnTheSpot-Prefix.pch";
 				INFOPLIST_FILE = "OnTheSpot/OnTheSpot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -277,6 +351,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OnTheSpot/OnTheSpot-Prefix.pch";
 				INFOPLIST_FILE = "OnTheSpot/OnTheSpot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
