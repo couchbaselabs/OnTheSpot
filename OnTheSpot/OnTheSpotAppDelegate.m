@@ -7,6 +7,7 @@
 //
 
 #import "OnTheSpotAppDelegate.h"
+#import "Couchbase.h"
 
 @implementation OnTheSpotAppDelegate
 
@@ -15,10 +16,15 @@
 
 @synthesize navigationController=_navigationController;
 
+- (void)couchbaseDidStart:(NSURL *)serverURL {
+    NSLog(@"Couch is ready!");
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     // Add the navigation controller's view to the window and display.
+    [Couchbase startCouchbase:self];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;

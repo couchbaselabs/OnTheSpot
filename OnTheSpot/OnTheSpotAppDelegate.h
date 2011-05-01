@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Couchbase.h"
 
 @interface OnTheSpotAppDelegate : NSObject <UIApplicationDelegate> {
 
