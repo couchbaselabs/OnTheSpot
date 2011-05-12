@@ -17,4 +17,7 @@
 
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 
+@property (nonatomic, retain) NSURL *couchURL;
+
+
 @end

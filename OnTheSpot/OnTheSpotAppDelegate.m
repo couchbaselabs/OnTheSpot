@@ -16,7 +16,10 @@
 
 @synthesize navigationController=_navigationController;
 
+@synthesize couchURL=_couchURL;
+
 - (void)couchbaseDidStart:(NSURL *)serverURL {
+    self.couchURL = serverURL;
     NSLog(@"Couch is ready!");
 }
 
@@ -24,9 +27,9 @@
 {
     // Override point for customization after application launch.
     // Add the navigation controller's view to the window and display.
-    [Couchbase startCouchbase:self];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+    [Couchbase startCouchbase:self];
     return YES;
 }
 
@@ -73,6 +76,7 @@
 {
     [_window release];
     [_navigationController release];
+    [_couchURL release];
     [super dealloc];
 }
 

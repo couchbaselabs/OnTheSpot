@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7929D9CB137B55A300D3185B /* Couchbase.h in Headers */ = {isa = PBXBuildFile; fileRef = 7929D9C9137B558400D3185B /* Couchbase.h */; };
+		7929D9D2137B572400D3185B /* libCouchbase-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7929D9D0137B572400D3185B /* libCouchbase-iphoneos.a */; };
+		7929D9D3137B572400D3185B /* libCouchbase-iphonesimulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7929D9D1137B572400D3185B /* libCouchbase-iphonesimulator.a */; };
+		7929D9D5137B574900D3185B /* Couchbase.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7929D9D4137B574900D3185B /* Couchbase.bundle */; };
+		7929D9D7137B5AB800D3185B /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7929D9D6137B5AB800D3185B /* libstdc++.dylib */; };
 		BC2F6357135DDF0600C63709 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BC2F6355135DDF0600C63709 /* DetailViewController.m */; };
 		BC2F6358135DDF0600C63709 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC2F6356135DDF0600C63709 /* DetailViewController.xib */; };
 		BCB6428F135D7F5000DA6256 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB6428E135D7F5000DA6256 /* UIKit.framework */; };
@@ -43,6 +48,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7929D9C9137B558400D3185B /* Couchbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Couchbase.h; sourceTree = "<group>"; };
+		7929D9D0137B572400D3185B /* libCouchbase-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCouchbase-iphoneos.a"; sourceTree = "<group>"; };
+		7929D9D1137B572400D3185B /* libCouchbase-iphonesimulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCouchbase-iphonesimulator.a"; sourceTree = "<group>"; };
+		7929D9D4137B574900D3185B /* Couchbase.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Couchbase.bundle; sourceTree = "<group>"; };
+		7929D9D6137B5AB800D3185B /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/gcc/arm-apple-darwin10/4.0.1/libstdc++.dylib"; sourceTree = SDKROOT; };
 		BC2F6354135DDF0600C63709 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		BC2F6355135DDF0600C63709 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		BC2F6356135DDF0600C63709 /* DetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewController.xib; sourceTree = "<group>"; };
@@ -74,12 +84,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7929D9D7137B5AB800D3185B /* libstdc++.dylib in Frameworks */,
 				BCC6E87C1360337C00BBA835 /* libTouchJSON.a in Frameworks */,
 				BCC6E840135DE2EC00BBA835 /* CoreLocation.framework in Frameworks */,
 				BCBD6728135D94C200B25825 /* CoreMotion.framework in Frameworks */,
 				BCB6428F135D7F5000DA6256 /* UIKit.framework in Frameworks */,
 				BCB64291135D7F5000DA6256 /* Foundation.framework in Frameworks */,
 				BCB64293135D7F5000DA6256 /* CoreGraphics.framework in Frameworks */,
+				7929D9D2137B572400D3185B /* libCouchbase-iphoneos.a in Frameworks */,
+				7929D9D3137B572400D3185B /* libCouchbase-iphonesimulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +102,7 @@
 		BCB6427F135D7F5000DA6256 = {
 			isa = PBXGroup;
 			children = (
+				7929D9D6137B5AB800D3185B /* libstdc++.dylib */,
 				BCC6E8701360336800BBA835 /* TouchJSON-iOS.xcodeproj */,
 				BCBD6723135D8E4D00B25825 /* Default.png */,
 				BCBD6724135D8E4D00B25825 /* Default@2x.png */,
@@ -110,6 +124,8 @@
 		BCB6428D135D7F5000DA6256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7929D9D0137B572400D3185B /* libCouchbase-iphoneos.a */,
+				7929D9D1137B572400D3185B /* libCouchbase-iphonesimulator.a */,
 				BCC6E83F135DE2EC00BBA835 /* CoreLocation.framework */,
 				BCBD6727135D94C200B25825 /* CoreMotion.framework */,
 				BCB6428E135D7F5000DA6256 /* UIKit.framework */,
@@ -123,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				BCC6E87E136034BA00BBA835 /* CJSONSerializer.h */,
+				7929D9C9137B558400D3185B /* Couchbase.h */,
 				BCB6429D135D7F5000DA6256 /* OnTheSpotAppDelegate.h */,
 				BCB6429E135D7F5000DA6256 /* OnTheSpotAppDelegate.m */,
 				BCB642A0135D7F5000DA6256 /* MainWindow.xib */,
@@ -140,6 +157,7 @@
 		BCB64295135D7F5000DA6256 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7929D9D4137B574900D3185B /* Couchbase.bundle */,
 				BCB64296135D7F5000DA6256 /* OnTheSpot-Info.plist */,
 				BCB64297135D7F5000DA6256 /* InfoPlist.strings */,
 				BCB6429A135D7F5000DA6256 /* OnTheSpot-Prefix.pch */,
@@ -166,6 +184,17 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		7929D9CA137B559A00D3185B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7929D9CB137B55A300D3185B /* Couchbase.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		BCB64289135D7F5000DA6256 /* OnTheSpot */ = {
 			isa = PBXNativeTarget;
@@ -174,6 +203,7 @@
 				BCB64286135D7F5000DA6256 /* Sources */,
 				BCB64287135D7F5000DA6256 /* Frameworks */,
 				BCB64288135D7F5000DA6256 /* Resources */,
+				7929D9CA137B559A00D3185B /* Headers */,
 			);
 			buildRules = (
 			);
@@ -237,6 +267,7 @@
 				BCBD6725135D8E4D00B25825 /* Default.png in Resources */,
 				BCBD6726135D8E4D00B25825 /* Default@2x.png in Resources */,
 				BC2F6358135DDF0600C63709 /* DetailViewController.xib in Resources */,
+				7929D9D5137B574900D3185B /* Couchbase.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +367,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/lib/gcc/arm-apple-darwin10/4.0.1\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -354,6 +386,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/lib/gcc/arm-apple-darwin10/4.0.1\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
