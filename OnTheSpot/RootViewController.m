@@ -154,7 +154,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSError* error = NULL;
     NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
     if (error != NULL) {
-        NSLog(@"Error while serializing %@", jsonData);
+        NSLog(@"Error while serializing for view %@", jsonData);
         detailViewController.textView.text = [jsonData description];
     }
     else {
@@ -226,9 +226,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
 {
-    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   [NSDate date], @"timestamp"
-                                   , newLocation, @"location"
+    NSMutableDictionary* sample = 
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:
+         [NSDate date], @"timestamp"
+         , [NSNumber numberWithDouble:newLocation.coordinate.latitude], @"lat"
+         , [NSNumber numberWithDouble:newLocation.coordinate.longitude], @"lon"
+         , [NSNumber numberWithDouble:newLocation.altitude], @"altitude"
+         , [NSNumber numberWithDouble:newLocation.course], @"course"
+         , [NSNumber numberWithDouble:newLocation.speed], @"speed"
+         , [NSNumber numberWithDouble:newLocation.horizontalAccuracy], @"horizontalAccuracy"
+         , [NSNumber numberWithDouble:newLocation.verticalAccuracy], @"verticalAccuracy`"
                                    , nil];
     [_locationSamples addObject:sample];
     
@@ -237,10 +244,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 - (void)locationManager:(CLLocationManager *)manager
        didUpdateHeading:(CLHeading *)newHeading
 {
-    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   [NSDate date], @"timestamp"
-                                   , newHeading, @"heading"
-                                   , nil];
+    NSMutableDictionary* sample = 
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSDate date], @"timestamp"
+           , [NSNumber numberWithDouble:newHeading.magneticHeading], @"magneticHeading"
+           , [NSNumber numberWithDouble:newHeading.trueHeading], @"trueHeading"
+           , [NSNumber numberWithDouble:newHeading.headingAccuracy], @"headingAccuracy"
+           , nil];
     [_headingSamples addObject:sample];
 }
 
@@ -264,6 +274,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         //       may not have been taken at the exact same time as the picture.
         NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
         if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            [sample removeObjectForKey:@"timestamp"];
             motionData = sample;
             break;
         }
@@ -274,23 +285,25 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     for (NSDictionary* sample in _locationSamples) {
         NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
         if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            [sample removeObjectForKey:@"timestamp"];
             locationData = sample;
             break;
         }
     }
 
-    NSDictionary* headingData = nil;
-    for (NSDictionary* sample in _headingSamples) {
+    NSMutableDictionary* headingData = nil;
+    for (NSMutableDictionary* sample in _headingSamples) {
         NSDate* sampleTimestamp = [sample valueForKey:@"timestamp"];
         if ([dateTimeDigitized timeIntervalSinceDate:sampleTimestamp] <= 0.0) {
+            [sample removeObjectForKey:@"timestamp"];
             headingData = sample;
             break;
         }
     }
 
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                     anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
-                                     , metaData, @"mediaMetaData"
+//                                     anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
+                                     metaData, @"mediaMetaData"
                                      , motionData, @"motionData"
                                      , locationData, @"locationData"
                                      , headingData, @"headingData"
@@ -300,6 +313,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
     [dateFormatter release];
     // store image in CouchDB
+    //    Test the various JSON transforms
+    NSError* error = NULL;
+    NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
+    if (error != NULL) {
+        NSLog(@"Error while serializing %@", jsonData);
+    }
+    else {
+        NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
+        NSLog(@"Made JSON %@", jsonString);
+    }
 }
 
 - (void)startMotionSampling
@@ -372,12 +395,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 - (void)takeMotionSample:(NSTimer*)aTimer
 {
-    NSMutableDictionary* sample = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   [NSDate date], @"timestamp"
-                                   , _motionManager.gyroData, @"gyroData"
-                                   , _motionManager.deviceMotion, @"deviceMotion"
-                                   , _motionManager.accelerometerData, @"accelerometerData"
-                                   , nil];
+    NSMutableDictionary* sample = 
+    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+     [NSDate date], @"timestamp"
+     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.x], @"gyro-x"
+     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.y], @"gyro-y"
+     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.z], @"gyro-z"
+     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.roll], @"attitude-roll"
+     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.pitch], @"attitude-pitch"
+     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.yaw], @"attitude-yaw"
+     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.x], @"accel-x"
+     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.y], @"accel-y"
+     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.z], @"accel-z"
+     , nil];
     [_motionSamples addObject:sample];
 }
 
