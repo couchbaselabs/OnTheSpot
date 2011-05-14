@@ -287,19 +287,60 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             break;
         }
     }
-
+    NSString* dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZ";
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter ]
+    
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                      anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
                                      , metaData, @"mediaMetaData"
                                      , motionData, @"motionData"
                                      , locationData, @"locationData"
                                      , headingData, @"headingData"
+//                                     , [NSDate date], @"timestamp"
                                      , nil];
     [_images addObject:jsonData];
     [self.tableView reloadData];
 
     [dateFormatter release];
     // store image in CouchDB
+<<<<<<< Updated upstream
+=======
+    //    Test the various JSON transforms
+    NSError* error = NULL;
+    NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
+    if (error != NULL) {
+        NSLog(@"Error while serializing %@", jsonData);
+    }
+    else {
+        NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
+        NSLog(@"Saving JSON %@", jsonString);
+                requestWithURL
+        
+        
+//        
+//        CouchDBSuccessHandler inSuccessHandler = ^(id inParameter) {
+//            NSLog(@"Wooohooo! %@", inParameter);
+////            [delegate performSelector:@selector(newItemAdded)];
+//        };
+//        
+//        CouchDBFailureHandler inFailureHandler = ^(NSError *error) {
+//            NSLog(@"D'OH! %@", error);
+//        };
+//        CFUUIDRef uuid = CFUUIDCreate(nil);
+//        NSString *guid = (NSString*)CFUUIDCreateString(nil, uuid);
+//        CFRelease(uuid);
+//        NSString *docId = [NSString stringWithFormat:@"%f-%@", CFAbsoluteTimeGetCurrent(), guid];
+//
+//        DatabaseManager *sharedManager = [DatabaseManager sharedManager:[delegate getCouchbaseURL]];
+//        CURLOperation *op = [sharedManager.database operationToCreateDocument:inDocument 
+//                                                                   identifier:docId
+//                                                               successHandler:inSuccessHandler 
+//                                                               failureHandler:inFailureHandler];
+//        [op start];
+//    }
+    }
+>>>>>>> Stashed changes
 }
 
 - (void)startMotionSampling
