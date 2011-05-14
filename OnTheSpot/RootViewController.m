@@ -287,8 +287,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             break;
         }
     }
-    NSString* dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZ";
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    NSString* dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZ";
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //    [dateFormatter ]
     
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -304,8 +304,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
     [dateFormatter release];
     // store image in CouchDB
-<<<<<<< Updated upstream
-=======
     //    Test the various JSON transforms
     NSError* error = NULL;
     NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
@@ -315,7 +313,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     else {
         NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
         NSLog(@"Saving JSON %@", jsonString);
-                requestWithURL
+//                requestWithURL
         
         
 //        
@@ -340,7 +338,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 //        [op start];
 //    }
     }
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
 }
 
 - (void)startMotionSampling
