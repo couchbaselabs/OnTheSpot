@@ -30,7 +30,7 @@
     // Add the navigation controller's view to the window and display.
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
-    [Couchbase startCouchbase:self];
+    [Couchbase startCouchbase:self.window.rootViewController];
     return YES;
 }
 

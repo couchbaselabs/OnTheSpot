@@ -39,6 +39,12 @@
     return self;
 }
 
+- (void)couchbaseDidStart:(NSURL *)serverURL {
+    self.couchURL = serverURL;
+    //    self.navigationController.couchURL = serverURL;
+    NSLog(@"Couch is woo ha!");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
