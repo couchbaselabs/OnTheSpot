@@ -24,6 +24,7 @@
 
 @synthesize sampleTimer = _sampleTimer;
 @synthesize images = _images;
+@synthesize couchURL=_couchURL;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -313,6 +314,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     else {
         NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
         NSLog(@"Saving JSON %@", jsonString);
+        
 //                requestWithURL
         
         

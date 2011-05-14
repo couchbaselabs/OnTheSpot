@@ -24,7 +24,9 @@
     NSMutableArray* _locationSamples;
     NSMutableArray* _headingSamples;
     NSTimer* _sampleTimer;
+    NSURL *_couchURL;
 }
+@property (nonatomic, retain) NSURL *couchURL;
 
 - (IBAction)takePicture;
 

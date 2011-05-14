@@ -20,6 +20,7 @@
 
 - (void)couchbaseDidStart:(NSURL *)serverURL {
     self.couchURL = serverURL;
+//    self.navigationController.couchURL = serverURL;
     NSLog(@"Couch is ready!");
 }
 
