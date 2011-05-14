@@ -355,7 +355,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSData* parsedJSON = [[CJSONDeserializer deserializer] deserialize:createDoc error:&error];
         
 //        upload the photo
-        NSData *photo = UIImageJPEGRepresentation(anImage, 0.75);
+        NSData *photo = UIImageJPEGRepresentation(anImage, 0.35);
         contentLength = [NSNumber numberWithUnsignedInt: [photo length]];
         
         NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@?rev=%@", 
