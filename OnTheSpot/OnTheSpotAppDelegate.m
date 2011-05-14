@@ -16,13 +16,8 @@
 
 @synthesize navigationController=_navigationController;
 
-@synthesize couchURL=_couchURL;
 
-- (void)couchbaseDidStart:(NSURL *)serverURL {
-    self.couchURL = serverURL;
-//    self.navigationController.couchURL = serverURL;
-    NSLog(@"Couch is ready!");
-}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -30,7 +25,6 @@
     // Add the navigation controller's view to the window and display.
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
-    [Couchbase startCouchbase:self.window.rootViewController];
     return YES;
 }
 
@@ -77,7 +71,6 @@
 {
     [_window release];
     [_navigationController release];
-    [_couchURL release];
     [super dealloc];
 }
 

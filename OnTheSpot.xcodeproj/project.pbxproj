@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79026EEB137EFD1D00939183 /* CJSONDeserializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 79026EEA137EFD1D00939183 /* CJSONDeserializer.h */; };
+		79026EEE137EFD5A00939183 /* CDataScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 79026EEC137EFD5A00939183 /* CDataScanner.h */; };
+		79026EEF137EFD5A00939183 /* CJSONDeserializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 79026EED137EFD5A00939183 /* CJSONDeserializer.h */; };
 		7929D9CB137B55A300D3185B /* Couchbase.h in Headers */ = {isa = PBXBuildFile; fileRef = 7929D9C9137B558400D3185B /* Couchbase.h */; };
 		7929D9D2137B572400D3185B /* libCouchbase-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7929D9D0137B572400D3185B /* libCouchbase-iphoneos.a */; };
 		7929D9D3137B572400D3185B /* libCouchbase-iphonesimulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7929D9D1137B572400D3185B /* libCouchbase-iphonesimulator.a */; };
@@ -48,6 +51,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		79026EEA137EFD1D00939183 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJSONDeserializer.h; path = ../Vendor/TouchJSON/Source/JSON/CJSONDeserializer.h; sourceTree = "<group>"; };
+		79026EEC137EFD5A00939183 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDataScanner.h; path = ../Vendor/TouchJSON/Source/CDataScanner.h; sourceTree = "<group>"; };
+		79026EED137EFD5A00939183 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CJSONDeserializer.h; path = ../Vendor/TouchJSON/Source/JSON/CJSONDeserializer.h; sourceTree = "<group>"; };
 		7929D9C9137B558400D3185B /* Couchbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Couchbase.h; sourceTree = "<group>"; };
 		7929D9D0137B572400D3185B /* libCouchbase-iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCouchbase-iphoneos.a"; sourceTree = "<group>"; };
 		7929D9D1137B572400D3185B /* libCouchbase-iphonesimulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCouchbase-iphonesimulator.a"; sourceTree = "<group>"; };
@@ -139,6 +145,9 @@
 			isa = PBXGroup;
 			children = (
 				BCC6E87E136034BA00BBA835 /* CJSONSerializer.h */,
+				79026EEC137EFD5A00939183 /* CDataScanner.h */,
+				79026EED137EFD5A00939183 /* CJSONDeserializer.h */,
+				79026EEA137EFD1D00939183 /* CJSONDeserializer.h */,
 				7929D9C9137B558400D3185B /* Couchbase.h */,
 				BCB6429D135D7F5000DA6256 /* OnTheSpotAppDelegate.h */,
 				BCB6429E135D7F5000DA6256 /* OnTheSpotAppDelegate.m */,
@@ -190,6 +199,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7929D9CB137B55A300D3185B /* Couchbase.h in Headers */,
+				79026EEB137EFD1D00939183 /* CJSONDeserializer.h in Headers */,
+				79026EEE137EFD5A00939183 /* CDataScanner.h in Headers */,
+				79026EEF137EFD5A00939183 /* CJSONDeserializer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

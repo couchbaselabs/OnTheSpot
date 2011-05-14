@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CMMotionManager.h>
 #import <CoreLocation/CoreLocation.h>
+#import "Couchbase.h"
+
 
 @interface RootViewController : UITableViewController
 < UINavigationControllerDelegate
 , UIImagePickerControllerDelegate
 , CLLocationManagerDelegate
+, CouchbaseDelegate
 > {
 
     @private
@@ -24,9 +27,9 @@
     NSMutableArray* _locationSamples;
     NSMutableArray* _headingSamples;
     NSTimer* _sampleTimer;
-    NSURL *_couchURL;
+    NSURL *_dbURL;
 }
-@property (nonatomic, retain) NSURL *couchURL;
+@property (nonatomic, retain) NSURL *dbURL;
 
 - (IBAction)takePicture;
 

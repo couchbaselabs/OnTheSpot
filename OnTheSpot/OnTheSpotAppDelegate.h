@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Couchbase.h"
 
 @interface OnTheSpotAppDelegate : NSObject <UIApplicationDelegate> {
 
@@ -17,7 +16,6 @@
 
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 
-@property (nonatomic, retain) NSURL *couchURL;
 
 
 @end

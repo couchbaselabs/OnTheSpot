@@ -3,12 +3,14 @@
 //  OnTheSpot
 //
 //  Created by afh on 19/04/11.
+//  Couchbase and JSON work 14/05/11 Chris Anderson
 //  Copyright 2011 Alexis Hildebrandt. All rights reserved.
 //
 
 #import "RootViewController.h"
 #import "DetailViewController.h"
 #import "CJSONSerializer.h"
+#import "CJSONDeserializer.h"
 
 @interface RootViewController()
 @property (nonatomic, retain) NSMutableArray* images;
@@ -24,7 +26,7 @@
 
 @synthesize sampleTimer = _sampleTimer;
 @synthesize images = _images;
-@synthesize couchURL=_couchURL;
+@synthesize dbURL=_dbURL;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -35,14 +37,14 @@
         _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         _locationManager.distanceFilter = kCLDistanceFilterNone;
         _locationManager.purpose = NSLocalizedString(@"Location services are used to attach the location of where a photo was taken.", nil);
+        [Couchbase startCouchbase:self];
     }
     return self;
 }
 
 - (void)couchbaseDidStart:(NSURL *)serverURL {
-    self.couchURL = serverURL;
-    //    self.navigationController.couchURL = serverURL;
-    NSLog(@"Couch is woo ha!");
+    self.dbURL = [serverURL URLByAppendingPathComponent:@"spot"];
+    NSLog(@"Couch is ready!");
 }
 
 - (void)viewDidLoad
@@ -190,6 +192,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_motionManager release];
     [_locationManager release];
+    [_dbURL release];
     [super dealloc];
 }
 
@@ -242,7 +245,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
          , [NSNumber numberWithDouble:newLocation.course], @"course"
          , [NSNumber numberWithDouble:newLocation.speed], @"speed"
          , [NSNumber numberWithDouble:newLocation.horizontalAccuracy], @"horizontalAccuracy"
-         , [NSNumber numberWithDouble:newLocation.verticalAccuracy], @"verticalAccuracy`"
+         , [NSNumber numberWithDouble:newLocation.verticalAccuracy], @"verticalAccuracy"
                                    , nil];
     [_locationSamples addObject:sample];
     
@@ -307,24 +310,20 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             break;
         }
     }
-//    NSString* dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZ";
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter ]
     
     NSMutableDictionary* jsonData = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-//                                     anImage, @"imageData" // will be stored as an attachment to the document in CouchDB
                                      metaData, @"mediaMetaData"
                                      , motionData, @"motionData"
                                      , locationData, @"locationData"
                                      , headingData, @"headingData"
-//                                     , [NSDate date], @"timestamp"
+                                     , [[NSDate date] description], @"timestamp"
                                      , nil];
     [_images addObject:jsonData];
     [self.tableView reloadData];
 
     [dateFormatter release];
+
     // store image in CouchDB
-    //    Test the various JSON transforms
     NSError* error = NULL;
     NSData* theJSON = [[CJSONSerializer serializer] serializeDictionary:jsonData error:&error];
     if (error != NULL) {
@@ -333,31 +332,46 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     else {
         NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
         NSLog(@"Saving JSON %@", jsonString);
+        NSLog(@"Couch URL %@", self.dbURL);
+        NSNumber *contentLength = [NSNumber numberWithUnsignedInt: [theJSON length]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.dbURL];
+        assert(request != nil);
+
+//        create the Database, just in case
+        [request setHTTPMethod: @"PUT"];
+        NSData *createDB = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+        NSLog(@"createDB %@", [[NSString alloc] initWithData:createDB encoding:NSUTF8StringEncoding]);
+
+//        create the Document
+        [request setHTTPMethod: @"POST"];
+        [request setHTTPBody: theJSON];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:[contentLength description] forHTTPHeaderField:@"Content-Length"];
+
+        NSData *createDoc = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+
+        NSLog(@"createDoc %@", [[NSString alloc] initWithData:createDoc encoding:NSUTF8StringEncoding]);
+
+        NSData* parsedJSON = [[CJSONDeserializer deserializer] deserialize:createDoc error:&error];
         
-//                requestWithURL
+//        upload the photo
+        NSData *photo = UIImageJPEGRepresentation(anImage, 0.75);
+        contentLength = [NSNumber numberWithUnsignedInt: [photo length]];
         
+        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@?rev=%@", 
+                               [self.dbURL absoluteString],
+                               [parsedJSON valueForKey:@"id"],
+                               @"photo.jpg",
+                               [parsedJSON valueForKey:@"rev"]];
         
-//        
-//        CouchDBSuccessHandler inSuccessHandler = ^(id inParameter) {
-//            NSLog(@"Wooohooo! %@", inParameter);
-////            [delegate performSelector:@selector(newItemAdded)];
-//        };
-//        
-//        CouchDBFailureHandler inFailureHandler = ^(NSError *error) {
-//            NSLog(@"D'OH! %@", error);
-//        };
-//        CFUUIDRef uuid = CFUUIDCreate(nil);
-//        NSString *guid = (NSString*)CFUUIDCreateString(nil, uuid);
-//        CFRelease(uuid);
-//        NSString *docId = [NSString stringWithFormat:@"%f-%@", CFAbsoluteTimeGetCurrent(), guid];
-//
-//        DatabaseManager *sharedManager = [DatabaseManager sharedManager:[delegate getCouchbaseURL]];
-//        CURLOperation *op = [sharedManager.database operationToCreateDocument:inDocument 
-//                                                                   identifier:docId
-//                                                               successHandler:inSuccessHandler 
-//                                                               failureHandler:inFailureHandler];
-//        [op start];
-//    }
+        NSURL *imagePUTURL = [NSURL URLWithString:urlString];        
+        request = [NSMutableURLRequest requestWithURL:imagePUTURL];
+        [request setHTTPMethod: @"PUT"];
+        [request setHTTPBody: photo];
+        [request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:[contentLength description] forHTTPHeaderField:@"Content-Length"];
+        NSData *putPhoto = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+        NSLog(@"putPhoto %@", [[NSString alloc] initWithData:putPhoto encoding:NSUTF8StringEncoding]);
     }
 }
 
@@ -434,15 +448,21 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSMutableDictionary* sample = 
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
      [NSDate date], @"timestamp"
-     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.x], @"gyro-x"
-     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.y], @"gyro-y"
-     , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.z], @"gyro-z"
-     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.roll], @"attitude-roll"
-     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.pitch], @"attitude-pitch"
-     , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.yaw], @"attitude-yaw"
-     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.x], @"accel-x"
-     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.y], @"accel-y"
-     , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.z], @"accel-z"
+     , [NSMutableDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.x], @"x"
+        , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.y], @"y"
+        , [NSNumber numberWithDouble:_motionManager.gyroData.rotationRate.z], @"z"        
+       ,nil ], @"gyro"
+     , [NSMutableDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.roll], @"roll"
+        , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.pitch], @"pitch"
+        , [NSNumber numberWithDouble:_motionManager.deviceMotion.attitude.yaw], @"yaw"
+        , nil], @"attitude"
+     , [NSMutableDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.x], @"x"
+        , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.y], @"y"
+        , [NSNumber numberWithDouble:_motionManager.accelerometerData.acceleration.z], @"z"
+        , nil], @"accel"
      , nil];
     [_motionSamples addObject:sample];
 }
