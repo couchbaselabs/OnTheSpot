@@ -26,7 +26,8 @@
 
 @synthesize sampleTimer = _sampleTimer;
 @synthesize images = _images;
-@synthesize dbURL=_dbURL;
+@synthesize couchURL=_couchURL;
+@synthesize syncItem;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -43,8 +44,33 @@
 }
 
 - (void)couchbaseDidStart:(NSURL *)serverURL {
-    self.dbURL = [serverURL URLByAppendingPathComponent:@"spot"];
+    self.couchURL = serverURL;
+	self.syncItem = [[[UIBarButtonItem alloc] 
+					  initWithTitle:@"Share" style:UIBarButtonItemStyleBordered
+					  target:self 
+					  action:@selector(sync) 
+					  ] autorelease];
+    self.navigationItem.rightBarButtonItem = self.syncItem;
+	self.navigationItem.rightBarButtonItem.enabled = YES;
     NSLog(@"Couch is ready!");
+}
+
+-(void)sync
+{
+//	self.syncItem = self.navigationItem.rightBarButtonItem;
+    NSString *theJSON = @"{\"source\":\"spot\",\"target\":\"http://jchris.iriscouch.com/spot\"}";
+    NSNumber *contentLength = [NSNumber numberWithUnsignedInt: [theJSON length]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self.couchURL URLByAppendingPathComponent:@"_replicate"]];
+    assert(request != nil);    
+    //        create the Document
+    [request setHTTPMethod: @"POST"];
+    [request setHTTPBody: [theJSON dataUsingEncoding: NSUTF8StringEncoding]];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[contentLength description] forHTTPHeaderField:@"Content-Length"];
+    
+    NSData *replicate = [NSURLConnection sendSynchronousRequest: request returningResponse: nil error: nil];
+    
+    NSLog(@"replicate %@", [[NSString alloc] initWithData:replicate encoding:NSUTF8StringEncoding]);
 }
 
 - (void)viewDidLoad
@@ -192,7 +218,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_motionManager release];
     [_locationManager release];
-    [_dbURL release];
+    [_couchURL release];
     [super dealloc];
 }
 
@@ -332,9 +358,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     else {
         NSString *jsonString = [[NSString alloc] initWithData:theJSON encoding:NSUTF8StringEncoding];
         NSLog(@"Saving JSON %@", jsonString);
-        NSLog(@"Couch URL %@", self.dbURL);
+        NSLog(@"Couch URL %@", self.couchURL);
         NSNumber *contentLength = [NSNumber numberWithUnsignedInt: [theJSON length]];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.dbURL];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self.couchURL URLByAppendingPathComponent:@"spot"]];
         assert(request != nil);
 
 //        create the Database, just in case
@@ -358,8 +384,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSData *photo = UIImageJPEGRepresentation(anImage, 0.35);
         contentLength = [NSNumber numberWithUnsignedInt: [photo length]];
         
-        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@?rev=%@", 
-                               [self.dbURL absoluteString],
+        NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@?rev=%@", 
+                               [self.couchURL absoluteString],
+                               @"spot",
                                [parsedJSON valueForKey:@"id"],
                                @"photo.jpg",
                                [parsedJSON valueForKey:@"rev"]];

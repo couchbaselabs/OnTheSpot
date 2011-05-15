@@ -27,9 +27,10 @@
     NSMutableArray* _locationSamples;
     NSMutableArray* _headingSamples;
     NSTimer* _sampleTimer;
-    NSURL *_dbURL;
+    NSURL *_couchURL;
 }
-@property (nonatomic, retain) NSURL *dbURL;
+@property (nonatomic, retain) NSURL *couchURL;
+@property(nonatomic, retain)UIBarButtonItem *syncItem;
 
 - (IBAction)takePicture;
 
