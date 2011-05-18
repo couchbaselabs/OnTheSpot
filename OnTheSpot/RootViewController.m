@@ -5,6 +5,7 @@
 //  Created by afh on 19/04/11.
 //  Couchbase and JSON work 14/05/11 Chris Anderson
 //  Copyright 2011 Alexis Hildebrandt. All rights reserved.
+//  See LICENSE.txt for details.
 //
 
 #import "RootViewController.h"

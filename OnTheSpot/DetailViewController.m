@@ -4,6 +4,7 @@
 //
 //  Created by afh on 19/04/11.
 //  Copyright 2011 Alexis Hildebrandt. All rights reserved.
+//  See LICENSE.txt for details.
 //
 
 #import "DetailViewController.h"
